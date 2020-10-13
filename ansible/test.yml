@@ -1,0 +1,10 @@
+---
+- hosts: "{{ host | default('all') }}"
+  become: yes
+  gather_facts: false
+  environment:
+    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  tasks:
+  
+  - name: Ping
+    ping:
