@@ -8,9 +8,9 @@ Create Docker containers that act as real servers based on Debian 10 with system
 What should you customize?
 ==========================
 
-- **scripts/start-env.sh** - this file starts containers, so put there how many containers you need
+- **docker/start-env.sh** - this file starts containers, so put there how many containers you need
 - **ansible/inventory** - fill this file with your hosts architecture
 
 #### Optionally
 
-- variables in **Makefile**
+- variables in **.env**

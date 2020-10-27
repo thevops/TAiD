@@ -21,7 +21,7 @@ RUN apt-get update \
              /lib/systemd/system/systemd-update-utmp*
 
 
-COPY docker/files/key.pub /root/.ssh/authorized_keys
+COPY .docker/key.pub /root/.ssh/authorized_keys
 
 EXPOSE 22
 

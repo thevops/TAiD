@@ -4,7 +4,7 @@ SHELL:=/bin/bash
 .SHELLFLAGS := -eu -o pipefail -c # exit if error in pipe
 
 # optionally load env vars from .env
-#include .env
+include .env
 
 args=$(filter-out $@,$(MAKECMDGOALS))
 
@@ -14,25 +14,21 @@ args=$(filter-out $@,$(MAKECMDGOALS))
 ## ----------------------------------------------------------------------------
 ##
 
-DOCKER_IMAGE=ansible-docker-env
-DOCKER_NETWORK_NAME=ansible-docker-net
-DOCKER_NETWORK_SUBNET=172.20.0.0
-DOCKER_CONTAINERS_PREFIX=ade_
 
 #------------------------------------------#
 ##          Docker
 #------------------------------------------#
 
 docker-build:: ## Build Docker image
-    [ -f docker/files/key ] && ssh-keygen -b 2048 -t rsa -q -N "" -C ansible-docker@env -f docker/files/key <<<y 2>&1 >/dev/null # non-interactive ssh without pass
-    docker build -t $(DOCKER_IMAGE) -f docker/Dockerfile .
+    [ -f .docker/key ] && ssh-keygen -b 2048 -t rsa -q -N "" -C ansible-docker@env -f .docker/key <<<y 2>&1 >/dev/null # non-interactive ssh without pass
+    docker build -t $(DOCKER_IMAGE) -f .docker/Dockerfile .
 
 docker-start-env: ## Start Docker environment
     export DOCKER_IMAGE=$(DOCKER_IMAGE)
     export DOCKER_NETWORK_NAME=$(DOCKER_NETWORK_NAME)
     export DOCKER_NETWORK_SUBNET=$(DOCKER_NETWORK_SUBNET)
     export DOCKER_CONTAINERS_PREFIX=$(DOCKER_CONTAINERS_PREFIX)
-    bash scripts/start-env.sh
+    bash .docker/start-env.sh
 
 docker-stop-env: ## Stop Docker environment
     docker stop -t1 $$(docker ps -a -q --filter="name=$(DOCKER_CONTAINERS_PREFIX)") # stop all containers
@@ -41,13 +37,14 @@ docker-clean: ## Clean Docker stuff
     docker image rm -f $(DOCKER_IMAGE)
     docker network rm $(DOCKER_NETWORK_NAME) || true
 
+
 #------------------------------------------#
 ##
 ##          Ansible
 #------------------------------------------#
 
 test-connection: ## Test connection to hosts
-    ansible-playbook -i ansible/inventory ansible/test.yml $(args)
+    ansible-playbook -i ansible/_inventory ansible/.test.yml $(args)
 
 
 #------------------------------------------#
@@ -57,7 +54,7 @@ test-connection: ## Test connection to hosts
 
 ssh-access: ## [host] Get into container over SSH
     @container_ip=$$(grep $(args) ansible/inventory | grep -Po 'ansible_host=\K[^ ]*')
-    ssh -i docker/files/key root@$$container_ip
+    ssh -i .docker/files/key root@$$container_ip
 
 # -----------------------------   DO NOT CHANGE   -----------------------------
 help:

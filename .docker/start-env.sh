@@ -22,23 +22,23 @@ docker network create --subnet=${DOCKER_NETWORK_SUBNET}/24 "$DOCKER_NETWORK_NAME
 #! ---   EDIT HERE   --- !#
 
 # front01
-docker_cmd front01 172.20.0.11
+docker_cmd front-01 172.20.0.11
 
 # front02
-docker_cmd front02 172.20.0.12
+docker_cmd front-02 172.20.0.12
 
 # app01
-docker_cmd app01 172.20.0.21
+docker_cmd app-01 172.20.0.21
 
 # app02
-docker_cmd app02 172.20.0.22
+docker_cmd app-02 172.20.0.22
 
 # backend01
-docker_cmd backend01 172.20.0.31
+docker_cmd backend-01 172.20.0.31
 
 # backend02
-docker_cmd backend02 172.20.0.32
+docker_cmd backend-02 172.20.0.32
 
 # backend03
-docker_cmd backend03 172.20.0.33
+docker_cmd backend-03 172.20.0.33
 

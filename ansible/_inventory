@@ -1,12 +1,12 @@
 [all:vars]
+ansible_port=22
 ansible_user=root
 ansible_python_interpreter=/usr/bin/python3
-ansible_port=22
 ansible_ssh_private_key_file=docker/files/key
 
 
 [front]
-front01 ansible_host=172.20.0.11 siemka=czesc
+front01 ansible_host=172.20.0.11
 front02 ansible_host=172.20.0.12
 
 
@@ -19,4 +19,3 @@ app02 ansible_host=172.20.0.22
 backend01 ansible_host=172.20.0.31
 backend02 ansible_host=172.20.0.32
 backend03 ansible_host=172.20.0.33
-
