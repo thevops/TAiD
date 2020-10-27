@@ -4,6 +4,7 @@
 function docker_cmd() {
     name="$1"
     ip="$2"
+    echo "Starting... $name - $ip"
     docker run -d --privileged --rm -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
             --name "${DOCKER_CONTAINERS_PREFIX}${name}" \
             --net "$DOCKER_NETWORK_NAME" \
@@ -12,7 +13,6 @@ function docker_cmd() {
     # start SSH service
     docker exec "${DOCKER_CONTAINERS_PREFIX}${name}" systemctl start ssh
 }
-
 
 
 # create network

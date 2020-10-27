@@ -32,6 +32,7 @@ docker-start-env: ## Start Docker environment
 
 docker-stop-env: ## Stop Docker environment
     docker stop -t1 $$(docker ps -a -q --filter="name=$(DOCKER_CONTAINERS_PREFIX)") # stop all containers
+    docker network rm $(DOCKER_NETWORK_NAME) || true
 
 docker-clean: ## Clean Docker stuff
     docker image rm -f $(DOCKER_IMAGE)
