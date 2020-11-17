@@ -22,6 +22,7 @@ args=$(filter-out $@,$(MAKECMDGOALS))
 docker-build:: ## Build Docker image
     [ -f .docker/key ] && ssh-keygen -b 2048 -t rsa -q -N "" -C ansible-docker@env -f .docker/key <<<y 2>&1 >/dev/null # non-interactive ssh without pass
     docker build -t $(DOCKER_IMAGE) -f .docker/Dockerfile .
+    chmod 600 .docker/key
 
 docker-start-env: ## Start Docker environment
     export DOCKER_IMAGE=$(DOCKER_IMAGE)
@@ -54,7 +55,7 @@ test-connection: ## Test connection to hosts
 #------------------------------------------#
 
 ssh-access: ## [host] Get into container over SSH
-    @container_ip=$$(grep $(args) ansible/inventory | grep -Po 'ansible_host=\K[^ ]*')
+    @container_ip=$$(grep $(args) ansible/_inventory | grep -Po 'ansible_host=\K[^ ]*')
     ssh -i .docker/files/key root@$$container_ip
 
 # -----------------------------   DO NOT CHANGE   -----------------------------
